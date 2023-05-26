@@ -63,13 +63,13 @@ neigh_modify	every 10 check yes delay 20                      # Setting frequenc
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Computes
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-compute 	1 all rdf 50 					# (https://docs.lammps.org/compute_rdf.html)
+compute 	1 all rdf 50 					# Function used to compute the radial distribution function (https://docs.lammps.org/compute_rdf.html)
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Fixes 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 fix	        1 all nve                                        			# Velocity-Verlet time integration (https://docs.lammps.org/fix_nve.html)
-fix 		2 all ave/time 100 1 ${freq_out} c_1[*] file example2.rdf mode vector   # (https://docs.lammps.org/fix_ave_time.html)
+fix 		2 all ave/time 100 1 ${freq_out} c_1[*] file example2.rdf mode vector   # Fix to time average the rdf compute results (https://docs.lammps.org/fix_ave_time.html)
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Setting up the runtime (time step, how often data is collected, type of data is collected)

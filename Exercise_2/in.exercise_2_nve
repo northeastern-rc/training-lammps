@@ -1,0 +1,86 @@
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# 2023 Bootcamp - Introduction to LAMMPS
+# Exercise 2 - Compute processing
+# Joseph Cooke PhD
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+clear
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Variables
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+variable        a           equal 0.8442            # Lattice constant of material
+variable        m           equal 1.0               # Mass of the material
+variable        Lx          equal 12.0              # Length of the x direction domain
+variable        Ly          equal 12.0              # Length of the y direction domain
+variable        Lz          equal 12.0              # Length of the z direction domain
+variable        T           equal 1.0               # Simulation temperature
+variable        T_damp      equal 1.0               # Temperature damping constant
+variable        seed        equal 1000              # Seed number
+variable        P           equal 0.0               # Simulation pressure
+variable        P_damp      equal 1000              # Pressure damping constant
+variable        dt          equal 0.001             # Timestep
+variable        sigma       equal 1.0               # Lennard-Jones potential value
+variable        epsilon     equal 1.0               # Lennard-Jones potential value
+variable        r_cut       equal 2.5               # Lennard-Jones cutoff length
+variable        freq_out    equal 500               # Frequency of output
+variable        runEq       equal 10000             # Equilibration
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# General system setup (units, atom_style, dimensionality, boundary conditions)
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+units           lj                                  # Setting units for the simulation (https://docs.lammps.org/units.html)
+dimension	3                                   # Dimensionality of siulation (https://docs.lammps.org/dimension.html)
+boundary	p p p                               # Boundary conditions for simulation (https://docs.lammps.org/boundary.html)
+atom_style      atomic                              # Atom style used in simulation (https://docs.lammps.org/atom_style.html)
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Creating the computational domain
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+lattice		fcc ${a}                                   # Setting starting lattice defined by lattice constant (https://docs.lammps.org/lattice.html)
+region		box block 0.0 ${Lx} 0.0 ${Ly} 0.0 ${Lz}    # Define a region in space by Lx, Ly, and Lz (https://docs.lammps.org/region.html)
+create_box	1 box                                      # Creating that defined region (https://docs.lammps.org/create_box.html)
+create_atoms	1 box                                      # Filling the region with atoms from the set lattice type (https://docs.lammps.org/create_atoms.html) 
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Setting atom properties
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+mass		1 ${m}                                           # Defining the mass of the atoms (this example only has 1 atom type) (https://docs.lammps.org/mass.html)
+
+velocity        all create ${T} ${seed} rot yes dist gaussian    # Setting initial velocity distribution based from initial temperature and random seed (https://docs.lammps.org/velocity.html)
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Setting up potentials
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+pair_style	lj/cut ${r_cut}                                  # Lennard-Jones Potential with cut off (https://docs.lammps.org/pair_style.html and https://docs.lammps.org/pair_lj.html)
+pair_coeff	* * ${epsilon} ${sigma} ${r_cut}                 # Setting potential energy between all atoms (* *) with the potential properties (https://docs.lammps.org/pair_coeff.html)
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Neighbor list definitions
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+neighbor	0.3 bin                                          # Setting skin depth for neighbor list (https://docs.lammps.org/neighbor.html)
+neigh_modify	every 10 check yes delay 20                      # Setting frequency of neighbor list checkes for rebuilds (https://docs.lammps.org/neigh_modify.html)
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Computes
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+compute 	1 all rdf 50 					# (https://docs.lammps.org/compute_rdf.html)
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Fixes 
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+fix	        1 all nve                                        			# Velocity-Verlet time integration (https://docs.lammps.org/fix_nve.html)
+fix 		2 all ave/time 100 1 ${freq_out} c_1[*] file example2.rdf mode vector   # (https://docs.lammps.org/fix_ave_time.html)
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Setting up the runtime (time step, how often data is collected, type of data is collected)
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+timestep        ${dt}                                                       # Setting the time step in the units selected in simulation (https://docs.lammps.org/timestep.html)
+thermo		${freq_out}                                                 # Setting how often the thermo class properies is calculated and shown (https://docs.lammps.org/thermo.html)
+thermo_style    custom step time pe ke etotal temp press lx ly lz           # Setting up custom thermo output (https://docs.lammps.org/thermo_style.html)
+
+dump 	        1 all custom ${freq_out} dump_ex_2.lammpstrj id type x y z vx vy vz  # Setting up per atom data save (https://docs.lammps.org/dump.html)
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Runtime
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+run		${runEq}                                                    # Running the simulation for set time (https://docs.lammps.org/run.html)

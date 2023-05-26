@@ -15,3 +15,5 @@ module load discovery
 module load openmpi/4.0.5
 
 mpirun -n 4 ../Initial_setup/lammps/src/lmp_mpi -in in.exercise_1_nve
+#mpirun -n 4 ../Initial_setup/lammps/src/lmp_mpi -in in.exercise_1_nvt
+#mpirun -n 4 ../Initial_setup/lammps/src/lmp_mpi -in in.exercise_1_npt

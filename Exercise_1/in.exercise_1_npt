@@ -61,16 +61,16 @@ neighbor	0.3 bin                                          # Setting skin depth f
 neigh_modify	every 10 check yes delay 20                      # Setting frequency of neighbor list checkes for rebuilds (https://docs.lammps.org/neigh_modify.html)
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# Fixes 
+# Fixes (Option 1 to do NPT - uncomment the lines #) 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#fix            1 all langevin ${T} ${T} ${T_damp} ${seed} zero yes         # (https://docs.lammps.org/fix_langevin.html)
-#fix            2 all press/berendsen iso ${P} ${P} ${P_damp}               # (https://docs.lammps.org/fix_press_berendsen.html)
+#fix            1 all langevin ${T} ${T} ${T_damp} ${seed} zero yes         # Langevin thermostat (https://docs.lammps.org/fix_langevin.html)
+#fix            2 all press/berendsen iso ${P} ${P} ${P_damp}               # Berendsen barostat (https://docs.lammps.org/fix_press_berendsen.html)
 #fix	        3 all nve                                                   # Velocity-Verlet time integration (https://docs.lammps.org/fix_nve.html)
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# Fixes 
+# Fixes (Option 2 to do NPT - uncomment the lines #)
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-fix	        1 all npt temp ${T} ${T} ${T_damp} iso ${P} ${P} ${P_damp}             # (https://docs.lammps.org/fix_nh.html)
+fix	        1 all npt temp ${T} ${T} ${T_damp} iso ${P} ${P} ${P_damp}             # Nose-Hoover time integration (https://docs.lammps.org/fix_nh.html)
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Setting up the runtime (time step, how often data is collected, type of data is collected)
@@ -89,9 +89,9 @@ run		${runEq}                         # Running the simulation for set time (htt
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Fixes 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-unfix           1
-#unfix           2
-#unfix           3
+unfix           1                                # Comment or uncomment to turn off the fixes from above (https://docs.lammps.org/unfix.html)
+#unfix           2                               # Comment or uncomment	to turn	off the	fixes from above (https://docs.lammps.org/unfix.html)
+#unfix           3                               # Comment or uncomment	to turn	off the	fixes from above (https://docs.lammps.org/unfix.html)
 fix		1 all nve                        # Velocity-Verlet time integration (https://docs.lammps.org/fix_nve.html)
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

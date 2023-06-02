@@ -19,7 +19,9 @@ sbatch submit.bash
 sbatch submit.bash
 
 ## Exercise 3:
-sbatch submit.bash
+submit_data.bash
+submit_restart.bash
 
 ## Exercise 4:
 sbatch submit.bash
+grep "Total wall time" output_* &> output_total.txt

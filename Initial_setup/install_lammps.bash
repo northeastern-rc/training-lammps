@@ -8,7 +8,7 @@ module purge
 module load discovery
 module load openmpi/4.0.5
 
-Setting current directory to be current working directory
+# Setting current directory to be current working directory
 cd $PWD 
 
 # Downloading LAMMPS and building mpi version of LAMMPS

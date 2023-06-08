@@ -12,6 +12,6 @@
 
 module purge
 module load discovery
-module load openmpi/4.0.5
+module load openmpi/3.1.2
 
 mpirun -n 4 ../Initial_setup/lammps/src/lmp_mpi -in in.exercise_2_nve

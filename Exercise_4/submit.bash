@@ -12,7 +12,7 @@
 
 module purge
 module load discovery
-module load openmpi/4.0.5
+module load openmpi/3.1.2
 
 for num_ntasks in 1 2 4 8 12 16
 do

@@ -6,7 +6,7 @@
 # Setting up the modules for the build
 module purge
 module load discovery
-module load openmpi/4.0.5
+module load openmpi/3.1.2
 
 # Setting current directory to be current working directory
 cd $PWD 

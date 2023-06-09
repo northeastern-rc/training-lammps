@@ -1,8 +1,18 @@
 #!/bin/bash
+
+#####Use after training##############
+##SBATCH -p short
+#####################################
+
+#####Use during training###############
+#SBATCH --partition=reservation
+#SBATCH --reservation=bootcamp_cpu_2023
+#######################################
+
+#####Use during &after training######
 #SBATCH --nodes=1
 #SBATCH --ntasks=4
 #SBATCH --mem=8G
-#SBATCH	--partition=short
 #SBATCH --time=00:10:00
 #SBATCH --job-name=lammps-bootcamp-exercise-1
 #SBATCH --output=%j.out

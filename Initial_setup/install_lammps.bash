@@ -1,6 +1,16 @@
 #!/bin/bash
+
+#####Use after training##############
+##SBATCH -p short
+#####################################
+
+#####Use during training###############
+#SBATCH --partition=reservation
+#SBATCH --reservation=bootcamp_cpu_2023
+#######################################
+
+#####Use during &after training######
 #SBATCH -N 1
-#SBATCH -p short
 #SBATCH -n 12
 
 # Setting up the modules for the build
